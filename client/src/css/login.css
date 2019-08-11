@@ -1,0 +1,41 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+.welcome{
+    background-color: #2196F3;
+    height:100vh;
+    transition: height 500ms;
+}
+.icon {
+    height:200px ;
+    width: 200px;
+    position: absolute;
+    transition: height 400ms,width 400ms,top 400ms,left 400ms !important;
+}
+.welButton{
+    position: absolute ;
+    opacity: 0;
+    padding:10px 40px;
+    background-color: #fff;
+    border-radius:20px;
+    font-weight:bold;
+    font-size:0.8rem;
+    cursor: pointer;
+}
+
+.login{
+    background: linear-gradient(rgba(4, 182, 253, 0.9),40%, rgb(4, 53, 128));
+    height:0;
+}
+.loginPanel{
+    padding:15px;
+}
+.tip{
+    font-size: 0.7rem !important;
+    font-weight: bold;
+    cursor: pointer;
+}
+.createPanel{
+    animation-duration: 500ms !important;
+}
