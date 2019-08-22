@@ -1,44 +1,21 @@
-#chat{
-    padding-top:10px
+.chat{
+    height:100%
 }
-.chatItem{
-    padding:10px 20px 10px 20px;
-    cursor: pointer;
-    transition:background-color .2s;
+.topBar{
+    border-bottom:1px solid rgba(96,125,139,.3);
 }
-.chatItem:hover{
-    background-color:rgba(33,150,243,.1);
-}
-.avatar{
-    float:left;
-    width:40px;
-    height:40px;
-}
-.rightItem{
-    margin-left:50px;
-    border-bottom:1px solid #e0e0e0;
+.chat .userInfo{
+    margin:20px auto;
+    width:fit-content;
     overflow: hidden;
-    padding-bottom: 10px;
 }
-.friends .rightItem{
-    padding-bottom: 5px;
-}
-.name{
-    font-weight: bold !important;
+.chat .userInfo .avatar{
+    width:35px;
+    height:35px;
     float:left;
 }
-.friends .name{
+.chat .userInfo .name{
+    margin-left:10px;
+    line-height: 35px;
     display: inline;
-    line-height: 40px;
-}
-.time{
-    float:right;
-    font-size:0.6rem !important;
-}
-.lately{
-    width:100%;
-    float:right;
-    margin:0 !important;
-    font-size: 0.5rem !important;
-    color:#757575;
 }

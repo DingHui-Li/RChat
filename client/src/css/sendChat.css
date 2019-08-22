@@ -1,0 +1,30 @@
+.sendChat{
+   
+    width:100% !important;
+    height:250px;
+}
+.sendChat .textArea{
+    height:50%;
+    margin:10px 20px;
+    overflow: auto
+}
+.sendChat .text{
+    max-height:100%;
+    overflow: auto;
+    font-size:1.2rem;
+}
+.sendChat .MuiInput-underline:before{
+    border:none !important;
+}
+.sendChat .MuiInput-underline:after{
+    border:none !important;
+}
+.sendChat .sendButton{
+    height:10%;
+    float:right;
+    margin-right:20px;
+}
+.sendChat .toolbar{
+    height: 10%;
+    padding:5px 20px
+}

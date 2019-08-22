@@ -1,5 +1,5 @@
 var mongoose=require('mongoose');
-const connectUrl="mongodb+srv://root:sad12345@cluster0-nzgcq.gcp.mongodb.net/rchat?retryWrites=true&w=majority";
+const connectUrl="mongodb://root:sad12345@47.106.211.38:27017/rchat?retryWrites=true&w=majority";
 const options={
     useNewUrlParser:true
 }
