@@ -1,17 +1,20 @@
 var mongoose=require('../Dao/connectDB')
 var chatListSchema=mongoose.Schema({
-    _id:{
-        type:mongoose.Schema.ObjectId
-    },
-    user:String,
-    friend:[{
+    _id:false,
+    userid:{
         type:String,
+        required: true
+    },
+    friendid:[{
+        type:String,
+        required: true,
         ref:'user'
     }],
     time:Date,
-    latelyChat:[{
-        type:String,
-        ref:'chat'
-    }]
+    latelyChat:String,
+    newMsgNum:{
+        type:Number,
+        default:0
+    }
 });
-module.exports=mongoose.Model('chatList',chatListSchema);
+module.exports=mongoose.model('chatList',chatListSchema);

@@ -5,12 +5,14 @@ const user=mongoose.Schema({
     },
     name:{
         type:String,
+        required: true,
         trim:true,
         unique:true
     },
     pw:{
         type:String,
-        trim:true
+        trim:true,
+        required: true
     },
     avatar:{
         type:String,
@@ -20,7 +22,4 @@ const user=mongoose.Schema({
         type:Date
     }
 });
-user.virtual('info').get(function(this:any){
-    return {'id':this._id,'name':this.name,'avatar':this.avatar}
-})
 module.exports=mongoose.model('user',user);

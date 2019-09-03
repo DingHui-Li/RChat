@@ -4,15 +4,21 @@ var chatSchema=mongoose.Schema({
     _id:{
         type:mongoose.Schema.ObjectId
     },
-    userid:String,
-    friendid:String,
+    userid:{
+        type:String,
+        required: true
+    },
+    friendid:{
+        type:String,
+        required: true
+    },
     chat:String,
     time:{
         type:Date
     },
-    read:{
-        type:Boolean,
-        default:false
+    type:{
+        type:String,
+        default:'text'
     }
 })
 

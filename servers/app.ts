@@ -65,7 +65,8 @@ server.listen(4000,()=>{
 })
 
 import chatSocket from './util/chatSocket'
-var io=require('socket.io')(server);
+const io=require('socket.io')(server);
 io.of('/chat')
     .on('connection',chatSocket)
 
+export default io; 

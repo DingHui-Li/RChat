@@ -34,7 +34,7 @@ export default class userDao{
                     if(result==null){
                         return resolve({"code":500,'msg':'密码错误'});
                     }else{
-                        return resolve({'code':200,'msg':'登陆成功','data':result.info,'id':result._id});
+                        return resolve({'code':200,'msg':'登陆成功','data':result});
                     }
                 });
             }else{

@@ -48,7 +48,7 @@ function Login(props){
             button.current.style.opacity="1";
             button.current.style.transition="opacity 450ms";
         },2000);
-    },icon);
+    },[]);
     function center(ref,height,width,parentHeight,parentWidth){
         ref.style.top=(parentHeight-height)/2+'px';
         ref.style.left=(parentWidth-width)/2+'px';
@@ -95,6 +95,7 @@ function Login(props){
         ).then(res=>{
             if(res.data.code===200){
                 localStorage['userInfo']=JSON.stringify(res.data.data);
+                console.log(res.data.data);
                 props.onUserInfoChange(res.data.data);
                 props.history.push('/');
             }else{

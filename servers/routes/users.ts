@@ -27,16 +27,17 @@ router.post('/login',function(req:any,res:any){
   ud.login(new userSchema({'name':name,'pw':pw})).then(async re=>{
       if(re.code==200){//密码验证通过
         let sd=new sessionDao();
-        let isexist=await sd.exist(re.id);
+        let isexist=await sd.exist(re.data._id);
         if(isexist!=null){//若查询到session记录
-          let result=await sd.remove(re.id);//则删除session
+          let result=await sd.remove(re.data._id);//则删除session
           console.log(result)
         }; 
         req.session.name=name;//重新生成session
-        req.session.userid=re.id;
-        req.session.save((err:any)=>{
+        req.session.userid=re.data._id;
+
+        req.session.save((err:any)=>{//为sessions表增加字段
           if(!err){
-            sd.setUserid(req.session.id,re.id,'web');
+            sd.setUserid(req.session.id,re.data._id,'web');
           }
         })
       }

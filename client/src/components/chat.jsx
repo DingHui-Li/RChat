@@ -1,65 +1,77 @@
 import React, { useEffect } from 'react'
-import {Grid,Avatar, Paper,Button,Hidden} from '@material-ui/core'
-import {ArrowBack} from '@material-ui/icons'
+import {Grid,Avatar, Paper,Button,Hidden,Fade } from '@material-ui/core'
+import {ArrowBack,KeyboardArrowRight} from '@material-ui/icons'
 import '../css/chat.css'
 import{apiHost,imgHost,chatSocket} from '../config'
 import SendChat from './sendChat';
 import Message from './message'
 import {globalContext} from '../index'
-import {friendContext} from '../views/App'
-import {friendsContext} from '../views/App'
+import {chatListContext} from '../views/App'
 import {axiosInstance as Axios} from '../index'
 import {useSnackbar} from 'notistack'
-import {getFriendData} from '../util/friendsUtil'
+import {timeParse} from '../util/timeUtil'
+import {updateChatList,findIndex} from '../util/arrayUtil'
 
 export default function Chat(props){
     const userInfo=React.useContext(globalContext).userInfo;
     const {enqueueSnackbar,closeSnackbar} =useSnackbar();
-    const selectFriend=React.useContext(friendContext).selectFriend;
-    const updateSelect=React.useContext(friendContext).updateSelect;
-    const friends=React.useContext(friendsContext);
+    const chatList=React.useContext(chatListContext);
     const [msgData,setMsgData]=React.useState([]);
-    useEffect(()=>{
-        if(selectFriend._id!==undefined){
+    useEffect(()=>{//获取选中的消息数据
+        if(chatList.selectChat.value._id!==undefined){
             getChat();
+            // console.log(selectFriend)
+            let temp=chatList.listData.data.slice();//清除消息列表提醒
+            let temp_=temp.map((item)=>item.friendid[0]);
+            let index=findIndex(temp_,'_id',chatList.selectChat.value._id);
+            if(index!==-1){
+                temp[index].newMsgNum=0;
+                chatList.listData.updateListData(temp);
+            }
         }
-    },[selectFriend]);
+    },[chatList.selectChat.value]);
     
-    useEffect(()=>{  
-                console.log('创建监听');
-                chatSocket.off('from');
-                chatSocket.on('from',data=>{//chat组件->message组件->oneMsg组件 
-                    if(data.data.userid!==selectFriend._id){//
-                        let friendData=getFriendData(friends,data.data.userid);
+    useEffect(()=>{  //监听接受的消息
+                chatSocket.off('from');console.log('监听')
+                chatSocket.on('from',(data)=>{//chat组件->message组件->oneMsg组件 
+                    if(data.data.userid!==chatList.selectChat.value._id){//
                         enqueueSnackbar('',{
-                            autoHideDuration:5000,
+                            autoHideDuration:8000,
                             variant:'info',
                             anchorOrigin:{
                                 horizontal:'right',
                                 vertical:'top'
                             },
                             children:(key)=>(
-                                <Paper style={{padding:'0',minWidth:'300px',cursor:'pointer'}} 
+                                <Paper style={{padding:'0',minWidth:'300px',cursor:'pointer'}}  elevation={5}
                                         onClick={()=>{
-                                                updateSelect(friendData);
-                                                closeSnackbar(key);
+                                            chatList.selectChat.updateChatSelect(data.listData.friendid[0]);
+                                            closeSnackbar(key);
                                         }}>
                                     <div style={{borderBottom:'1px solid #e0e0e0',padding:'10px'}}>
-                                        <Avatar src={imgHost+friendData.avatar} style={{width:'20px',height:'20px',float:'left'}}></Avatar>
-                                        <div style={{display:'inline-block',lineHeight:'20px',marginLeft:'5px',fontSize:'0.8rem',color:'#757575'}}>{friendData.name}</div>
+                                        <Avatar src={imgHost+data.listData.friendid[0].avatar} style={{width:'23px',height:'23px',float:'left'}}></Avatar>
+                                        <div style={{display:'inline-block',lineHeight:'23px',marginLeft:'5px',fontWeight:'bold'}}>
+                                            <div> {data.listData.friendid[0].name}</div>
+                                        </div>
+                                        <div style={{fontWeight:'normal',fontSize:'10px',float:'right'}}>{timeParse(data.data.time)}</div>
                                     </div>
-                                    <div style={{padding:'10px',overflow: 'hidden',whiteSpace: 'nowrap',textOverflow: 'ellipsis',marginLeft:'5px'}}>
+                                    <div style={{padding:'10px',overflow: 'hidden',whiteSpace: 'nowrap',textOverflow: 'ellipsis',marginLeft:'28px'}}>
                                         {data.data.chat.substring(0,35)}
+                                        <div style={{float:'right'}}> <KeyboardArrowRight /></div> 
                                     </div>
                                 </Paper>
                             )
                         })
                     }
-                    if(selectFriend._id===data.data.userid){
-                         newMsg(data.data);
+                    if( chatList.selectChat.value._id===data.data.userid){
+                        data.listData.newMsgNum=0;
+                        newMsg(data.data);
+                        chatSocket.emit('receive',{'userid':userInfo._id,'friendid':chatList.selectChat.value._id});//确认消息
                     }
+                    let updatedListData=updateChatList(chatList.listData.data,data.listData);//更新chatlist
+                    chatList.listData.updateListData(updatedListData);
                 });
-    },[friends,selectFriend,msgData])
+    },[chatList.listData,chatList.selectChat.value,msgData])
 
     function newMsg(msg){
         let temp=msgData.slice();
@@ -78,18 +90,16 @@ export default function Chat(props){
             method:'post',
             url:apiHost+'/chat/getChat',
             data:{
-                _id:0,
-                friendid:selectFriend._id,
-                page:1,
+                friendid:chatList.selectChat.value._id,
+                time:new Date()
             }
         }).then(res=>{
             if(res.data.code===200){
-                console.log(res.data.data)
                 setMsgData(res.data.data)
             }
         })
     }
-    function sendMsg(msg){//sendChat组件->chat组件->message组件
+    function sendMsg(msg){//sendChat组件->chat组件->message组件->oneMsg组件
         let temp=msgData.slice();
         temp.push(JSON.parse(msg)) 
         setMsgData(temp);
@@ -97,18 +107,18 @@ export default function Chat(props){
     return (
         <Grid item xs={12} className='chat'>
             {
-                selectFriend!==-1&& 
+                chatList.selectChat.value!==-1&&
                 <div>
                     <Grid item xs={12} className="topBar">
                         <Hidden mdUp>
-                            <Button style={{float:'left'}} onClick={()=>{updateSelect(-1)}}>
+                            <Button style={{float:'left'}} onClick={()=>{chatList.selectChat.updateChatSelect(-1)}}>
                                 <ArrowBack></ArrowBack>
                             </Button>
                         </Hidden>
                         <div>
                              <div className="userInfo">
-                                <Avatar src={imgHost+selectFriend.avatar} className="avatar"></Avatar>
-                                <span className="name">{selectFriend.name}</span>
+                                <Avatar src={imgHost+chatList.selectChat.value.avatar} className="avatar"></Avatar>
+                                <span className="name">{chatList.selectChat.value.name}</span>
                             </div>
                         </div>
                     </Grid>

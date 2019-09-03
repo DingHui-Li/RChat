@@ -1,9 +1,14 @@
+import io from '../app'
 var Chat=require('../schema/chatSchema')
+var ChatList=require('../schema/chatListSchema')
 var mongoose=require('../Dao/connectDB')
 import chatDao from'../Dao/chatDao'
-let cd=new chatDao();
+var cd=new chatDao();
+import chatListDao from '../Dao/chatListDao'
+var cld=new chatListDao();
 
 const socketData=new Array();
+
 export default function chatSocket(socket:any){
     socket.on('to',async function(data:any,callback:any){//接受消息
         let chat=new Chat({
@@ -13,14 +18,35 @@ export default function chatSocket(socket:any){
             chat:data.msg,
             time:new Date()
         })
-        let response=await cd.newMsg(chat);//保存到数据库
-        callback(response); //回调
+
+        let chatList_to=new ChatList({//发送者
+            userid:data.userid,
+            friendid:data.friendid,
+            latelyChat:data.msg,
+            time:new Date()
+        }); 
+        let newMsgNum=await cld.getNewMsgNum(data.friendid,data.userid);//获取未读消息数
+        let chatList_from=new ChatList({//接受者
+            userid:data.friendid,
+            friendid:data.userid,
+            latelyChat:data.msg,
+            time:new Date(),
+            newMsgNum:newMsgNum+1
+        });
+        let updateResult_to=await cld.addChatList(chatList_to);//更新chatlist
+        let updateResult_from=await cld.addChatList(chatList_from);        
+        let saveResult=await cd.newMsg(chat);//保存到数据库
+        saveResult.listData=updateResult_to.data;
+        callback(saveResult); //回调
 
         let socketid=getSocketId(data.friendid);
         if(socketid!==""){//friend在线
-            socket.to(socketid).emit('from',{'data':response.data});//转发
+            socket.to(socketid).emit('from',{'code':200,'data':saveResult.msgData,'listData':updateResult_from.data});//转发,data:chat数据，listData：chatlist数据
         }
     });
+    socket.on('receive',function(data:any){
+        cld.clearMsgNum(data.userid,data.friendid);
+    })
     socket.on('newConnect',function(data:any){//用户新连接
         addSocketId(data.userid,socket.id)//保存对应的userid和socketid
     });
@@ -53,7 +79,7 @@ function addSocketId(userid:String,socketid:String){
     }
 }
 
-function getSocketId(friendid:String):String{
+function getSocketId(friendid:string):string{
     for(let i=0;i<socketData.length;i++){
         if(socketData[i].userid===friendid){
             return socketData[i].socketid;

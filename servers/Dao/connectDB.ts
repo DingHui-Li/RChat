@@ -14,4 +14,5 @@ mongoose.connection.on('error',function(err:any){
 mongoose.connection.on('disconnected',function(){
     console.log('mongoDB断开连接');
 })
+mongoose.set('useFindAndModify', false);
 module.exports=mongoose;

@@ -35,6 +35,7 @@ function Index(){
     const [globalData,setGlobalData]=useState({'userInfo':info});
 
     function userInfoUpdate(info){
+        console.log(info)
         setGlobalData({...globalData,['userInfo']:info});
     }
     return(

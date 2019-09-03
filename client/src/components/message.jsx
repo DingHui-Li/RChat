@@ -6,16 +6,15 @@ import {scrollDown} from '../util/scrollRoll'
 
 export default function Message(props){
     const userInfo=React.useContext(globalContext).userInfo;
-    const [msgs,setMsgs]=React.useState([]);
     useEffect(()=>{
         scrollDown('messageBox');
     },[props.newMsgData])
     return(
         <div className="message" id="messageBox" style={{height:props.height}}>
             {
-                props.newMsgData.map(msg=>{
+                props.newMsgData.map((msg)=>{
                     if(msg!=[]){
-                        return <OneMsg isme={msg.userid===userInfo.id} msgData={msg} key={msg._id}></OneMsg>
+                        return  <OneMsg isme={msg.userid===userInfo._id} msgData={msg} key={msg._id}></OneMsg>
                     }
                 })
             }

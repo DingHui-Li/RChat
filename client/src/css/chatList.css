@@ -1,13 +1,29 @@
-#chat{
-    padding-top:10px
+#chatList{
+    /* padding:5px; */
+    -webkit-user-select: none;  
+    -moz-user-select:none;  
+    -o-user-select:none;  
+    -ms-user-select:none;
+}
+#chatList .chatItemBox{
+    width:100%;
+    float:left;
+    background-color: #fff !important;
+    position: relative;
+    padding:0;
 }
 .chatItem{
-    padding:10px 20px 10px 20px;
+    padding:10px 20px 0 20px;
     cursor: pointer;
-    transition:background-color .2s;
+    transition:background-color .3s !important;
+    /* margin-bottom:5px; */
+    background-color: #fff;
 }
 .chatItem:hover{
     background-color:rgba(33,150,243,.1);
+}
+.chatSelcted{
+    background-color:rgba(33,150,243,.1) !important;
 }
 .avatar{
     float:left;
@@ -16,12 +32,11 @@
 }
 .rightItem{
     margin-left:50px;
-    border-bottom:1px solid #e0e0e0;
     overflow: hidden;
     padding-bottom: 10px;
 }
 .friends .rightItem{
-    padding-bottom: 5px;
+    /* padding-bottom: 5px; */
 }
 .name{
     font-weight: bold !important;
@@ -33,12 +48,28 @@
 }
 .time{
     float:right;
-    font-size:0.6rem !important;
+    font-size:0.8rem !important;
+    color:#757575;
 }
 .lately{
     width:100%;
     float:right;
     margin:0 !important;
-    font-size: 0.5rem !important;
+    font-size: 0.9rem !important;
     color:#757575;
+}
+
+#chatList .deleteBox{
+    padding:5px;
+    width: 100%;
+    position: absolute;   
+     border-radius: 5px;
+}
+.deleteBox .deleteBtn{
+    float:right;
+    display:inline-block;
+    line-height:40px;
+    margin-right:20px;
+    color:#fff;
+    background-color: red;
 }
