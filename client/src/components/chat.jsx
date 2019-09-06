@@ -17,6 +17,7 @@ export default function Chat(props){
     const {enqueueSnackbar,closeSnackbar} =useSnackbar();
     const chatList=React.useContext(chatListContext);
     const [msgData,setMsgData]=React.useState([]);
+
     useEffect(()=>{//获取选中的消息数据
         if(chatList.selectChat.value._id!==undefined){
             getChat();
@@ -125,7 +126,7 @@ export default function Chat(props){
                     {
                         messageArea()
                     }
-                     <SendChat sendMsg={sendMsg} />
+                     <SendChat sendMsg={sendMsg}/>
                 </div>
             }
         </Grid>

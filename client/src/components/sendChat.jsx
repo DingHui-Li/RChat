@@ -5,7 +5,7 @@ import '../css/sendChat.css'
 import SendIcon from '@material-ui/icons/Send'
 import {chatSocket} from '../config'
 import {globalContext} from '../index'
-import {friendContext,chatListContext} from '../views/App'
+import {friendContext,chatListContext,isVAContext} from '../views/App'
 import {useSnackbar} from 'notistack'
 import {updateChatList} from '../util/arrayUtil'
 
@@ -13,7 +13,6 @@ export default function SendChat(props){
     const [msgText,setMsgText]=React.useState('');
     let globalData=React.useContext(globalContext);
     const userInfo=globalData.userInfo;
-    const selectFriend=React.useContext(friendContext).selectFriend;
     const {enqueueSnackbar}=useSnackbar();
     const chatList=React.useContext(chatListContext);
 
@@ -48,7 +47,7 @@ export default function SendChat(props){
     }
     return(
         <Paper className='sendChat animated fadeInUp' style={{animationDuration:'0.5s'}} elevation={0}>
-            <Toolbar />
+            <Toolbar/>
             <div type='text' className="textArea">
                 <TextField multiline={true} fullWidth={true} autoFocus={true} className="text" onChange={msgTextChange} value={msgText}></TextField>
             </div>
@@ -61,8 +60,9 @@ export default function SendChat(props){
     )
 }
 
-function Toolbar(){
+function Toolbar(props){
     const [anchorEl,setAnchorEl]=React.useState(null);
+    const VA=React.useContext(isVAContext);
     const open=Boolean(anchorEl);
     return (
         <div className='toolbar'>
@@ -92,7 +92,7 @@ function Toolbar(){
                 <LocalPhone  className='icon'/>
             </Tooltip>
             <Tooltip title='视频通话'>
-                <Videocam  className='icon'/>
+                <Videocam  className='icon' onClick={()=>{VA.updateIsVA(true)}}/>
             </Tooltip>
             <Tooltip title='语音消息'>
                 <VolumeUp  className='icon'/>

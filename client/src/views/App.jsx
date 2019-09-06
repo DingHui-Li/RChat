@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import {Grid,Paper,Tabs,Tab,Avatar,Hidden,Button,Slide} from '@material-ui/core'
+import {Grid,Paper,Tabs,Tab,Avatar,Hidden,Button,Slide,Fade} from '@material-ui/core'
 import {ChatBubble,ContactPhone} from '@material-ui/icons'
 import '../css/app.css'
 import SwipeableViews from 'react-swipeable-views'
@@ -7,6 +7,7 @@ import ChatList from '../components/chatList.jsx'
 import Friends from '../components/friendsList.jsx'
 import Chat from '../components/chat'
 import PersonHome from '../components/personHome'
+import VAChat from '../components/VAChat'
 import {withRouter} from 'react-router-dom'
 import {apiHost,imgHost,chatSocket} from '../config'
 import {axiosInstance as Axios} from '../index'
@@ -16,6 +17,7 @@ import{globalContext} from '../index'
 export const friendContext=React.createContext();//选中好友列表中的一个数据
 export const friendsContext=React.createContext();//好友列表数据
 export const chatListContext=React.createContext();
+export const isVAContext=React.createContext();
 
 function App(props) {
   const userInfo=React.useContext(globalContext).userInfo;
@@ -79,10 +81,13 @@ function App(props) {
     }
   )()
 
-  
   const [value,setVal]=React.useState(0);//Tab -index
   const [selectFriend,setSelectFriend]=React.useState(-1);
   const [friends,setFriends] =React.useState([]);
+  const [isVA,setIsVA]=React.useState({
+    'value':false,
+    'updateIsVA':(flag)=>{setIsVA({...isVA,['value']:flag})}
+  });
 
   const [chatList,setChatList]=React.useState({//chatList数据
     'data':[],//值
@@ -117,6 +122,7 @@ function App(props) {
     <friendsContext.Provider value={friends}>
       <friendContext.Provider value={{'updateSelect':updateSelect,'selectFriend':selectFriend}}>
         <chatListContext.Provider value={{'listData':chatList,'selectChat':selectChat}}>
+        <isVAContext.Provider value={isVA}>
         <Grid container  style={{position:'fixed'}}>   
             <Grid item xs={12} sm={5} md={4} lg={3}  className={'sideNav'}>
               <div className="userInfo">
@@ -148,7 +154,9 @@ function App(props) {
                     </Grid>
                   </Slide>
             </Hidden>
+            <VAChat />
         </Grid>
+        </isVAContext.Provider>
         </chatListContext.Provider>
       </friendContext.Provider>
     </friendsContext.Provider>
