@@ -26,11 +26,22 @@ export default function VAChat(props){
             (
                 async()=>{//进入该界面后首先获取前摄像头
                     let hasFrontCam=await getCameraMedia('user');
-                    if(hasFrontCam===true) return;
+                    if(hasFrontCam===true) {
+                        setMediaType(0);
+                        return;
+                    }
                     let hasBackCam=await  getCameraMedia('environment');//若获取不到，则获取后摄像头
-                    if(hasBackCam===true) return;
+                   
+                    if(hasBackCam===true){
+                         setMediaType(1);
+                         return;
+                    } 
                     let hasDisplay=await  getDisplayMedia();//若获取不到，则捕获屏幕
-                    if(hasDisplay===true) return;
+                    
+                    if(hasDisplay===true){
+                        setMediaType(2);
+                        return;
+                    } 
                     isVA.updateIsVA(false);//若失败，则关闭该页面
                     alert(hasDisplay.message);
                 }
@@ -114,26 +125,41 @@ export default function VAChat(props){
             })
     }
     const [anchorEl,setAnchorEl]=React.useState(null);
+    const [mediaType,setMediaType]=React.useState(0);
     function selectButton(){//选择数据源
         return(
             <React.Fragment>
                 <ButtonBase onClick={(e)=>{ setAnchorEl(e.target)}} className='selectButton'>
-                    <Airplay style={{color:'#fff'}}/>
+                    {
+                        mediaType===0&&
+                        <CameraAltTwoTone style={{color:'#fff'}} />
+                    }
+                    {
+                        mediaType===1&&
+                        <CameraAlt style={{color:'#fff'}} />
+                    }
+                    {
+                        mediaType===2&&
+                        <Airplay style={{color:'#fff'}}/>
+                    }
                 </ButtonBase>
                 <Menu open={Boolean(anchorEl)} anchorEl={anchorEl} onClose={()=>{setAnchorEl(null)}}  keepMounted>
                     <MenuItem onClick={async ()=>{
+                            setMediaType(0);
                             let re=await getCameraMedia('user');
                             if(re!==true) alert(re.message);
                         }}>
                         <CameraAltTwoTone />前置摄像头
                     </MenuItem>
                     <MenuItem onClick={async ()=>{
+                            setMediaType(1);
                             let re=await getCameraMedia('environment');
                             if(re!==true) alert(re.message);
                         }}>
                         <CameraAlt />后置摄像头
                     </MenuItem>
                     <MenuItem onClick={async()=>{
+                            setMediaType(2);
                             let re=await getDisplayMedia();
                             if(re!==true) alert(re.message);
                         }}>
@@ -164,7 +190,7 @@ export default function VAChat(props){
                     <LockOpen className='icon'  onClick={()=>{setLock(true)}} />
                 }
             </Paper>
-            <video id="videoChat" autoPlay></video>
+            <video id="videoChat" autoPlay style={{transform:mediaType===0?' rotateY(180deg)':''}}></video>
             <div className="option" ref={optRef} onMouseEnter={mouseEnter} onMouseLeave={mouseLeave}>
                 {selectButton()}
                 <ButtonBase className='closeBtn' onClick={close} elevation={7}>
@@ -180,7 +206,7 @@ export default function VAChat(props){
                     let coordinate=elementMove('#VAChat','#selfView',mouseCoord,e);
                     if(coordinate) setMouseCoord(coordinate);
                 }}>
-                    <video id="selfVideo" autoPlay></video>
+                    <video id="selfVideo" autoPlay style={{transform:mediaType===0?' rotateY(180deg)':''}}></video>
                     <IconButton style={{position:'absolute',bottom:0,right:0}} onClick={(e)=>{
                         document.getElementById('selfVideo').srcObject=document.getElementById('videoChat').srcObject;
                     }}> 
