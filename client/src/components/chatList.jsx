@@ -94,7 +94,7 @@ export default function ChatList(props){
             {
                 chatList.listData.data.map((item)=>
                     <Grid item xs={12} key={item._id} >
-                         <div className='deleteBox'>
+                        <div className='deleteBox'>
                             <Button className="deleteBtn" onClick={()=>{remove(item._id)}}>删除</Button>
                         </div>
                         <div className="chatItemBox" id={item._id} style={{marginLeft:'0'}}
@@ -106,7 +106,11 @@ export default function ChatList(props){
                                     <div className={'rightItem'}>
                                         <Typography noWrap={true} className={'name'}>{item.friendid[0].name}</Typography>
                                         <Typography noWrap={true} className={'time'}>{timeParse(item.time)}</Typography>
-                                        <Typography noWrap={true} className={'lately'}>{item.latelyChat}</Typography>
+                                        <Typography noWrap={true} className={'lately'}>
+                                            {
+                                                item.type==='video'?"[视频通话]":item.latelyChat
+                                            }
+                                        </Typography>
                                     </div>
                             </div>
                         </div>

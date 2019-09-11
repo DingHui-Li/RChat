@@ -69,3 +69,31 @@
     top:0;
     left:0;
 }
+#VAChat .call{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 12;
+    background-color: #fff;
+}
+#VAChat .call .userInfo{
+    height:50%;
+    width:100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+#VAChat .call .hangup{
+    height:50%;
+    width:100%;
+    display: flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items: center;
+}
+#VAChat .call .avatar{
+    height:100px;
+    width:100px;
+    border-radius: 50%;
+}

@@ -23,20 +23,20 @@ export default function OneMsg(props){
                         <Avatar src={imgHost+userInfo.avatar} className="avatar " style={{float:'right'}}></Avatar>
                         <div className="msgTextRight">
                             <div className="msg rightMsg">
-                                {props.msgData.chat}
+                                {props.msgData.type==='video'?'[视频通话]':props.msgData.chat}
                             </div>
                         </div>
-                       {props.msgData.code===500&&<Error className="errorIcon" style={{float:'right'}}></Error>}
+                        {props.msgData.code===500&&<Error className="errorIcon" style={{float:'right'}}></Error>}
                     </div>
                     :
                     <div className="msgbox">
                         <Avatar src={imgHost+selectChat.avatar} className="avatar" style={{float:'left'}}></Avatar>
                         <div className="msgTextLeft">
                             <div className="msg leftMsg">
-                                {props.msgData.chat}
+                                {props.msgData.type==='video'?'[视频通话]':props.msgData.chat}
                             </div>
                         </div>
-                       { props.msgData.code===500&&<Error className="errorIcon" style={{float:'left'}}></Error>}
+                        { props.msgData.code===500&&<Error className="errorIcon" style={{float:'left'}}></Error>}
                     </div>
                 }
             </div>

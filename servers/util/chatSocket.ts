@@ -16,14 +16,16 @@ export default function chatSocket(socket:any){
             userid:data.userid,
             friendid:data.friendid,
             chat:data.msg,
-            time:new Date()
+            time:new Date(),
+            type:data.type
         })
 
         let chatList_to=new ChatList({//发送者
             userid:data.userid,
             friendid:data.friendid,
             latelyChat:data.msg,
-            time:new Date()
+            time:new Date(),
+            type:data.type
         }); 
         let newMsgNum=await cld.getNewMsgNum(data.friendid,data.userid);//获取未读消息数
         let chatList_from=new ChatList({//接受者
@@ -31,7 +33,8 @@ export default function chatSocket(socket:any){
             friendid:data.userid,
             latelyChat:data.msg,
             time:new Date(),
-            newMsgNum:newMsgNum+1
+            newMsgNum:newMsgNum+1,
+            type:data.type
         });
         let updateResult_to=await cld.addChatList(chatList_to);//更新chatlist
         let updateResult_from=await cld.addChatList(chatList_from);        
@@ -41,7 +44,7 @@ export default function chatSocket(socket:any){
 
         let socketid=getSocketId(data.friendid);
         if(socketid!==""){//friend在线
-            socket.to(socketid).emit('from',{'code':200,'data':saveResult.msgData,'listData':updateResult_from.data});//转发,data:chat数据，listData：chatlist数据
+            socket.to(socketid).emit('from',{'code':200,'data':saveResult.msgData,'listData':updateResult_from.data,'offer':data.offer});//转发,data:chat数据，listData：chatlist数据
         }
     });
     socket.on('receive',function(data:any){
@@ -49,6 +52,19 @@ export default function chatSocket(socket:any){
     })
     socket.on('newConnect',function(data:any){//用户新连接
         addSocketId(data.userid,socket.id)//保存对应的userid和socketid
+    });
+    socket.on('call',function(data:any){
+        let socketid=getSocketId(data.friendid);
+        console.log(data);
+        if(socketid){
+            socket.to(socketid).emit('call',{'action':data.action,'answer':data.answer})
+        }
+    });
+    socket.on('iceCandidate',function(data:any){
+        let socketid=getSocketId(data.friendid);
+        if(socketid){
+            socket.to(socketid).emit('iceCandidate',{'iceCandidate':data.iceCandidate});
+        }
     });
     // =============================================
     socket.on('connect',function(){

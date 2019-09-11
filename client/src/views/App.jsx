@@ -17,7 +17,7 @@ import{globalContext} from '../index'
 export const friendContext=React.createContext();//选中好友列表中的一个数据
 export const friendsContext=React.createContext();//好友列表数据
 export const chatListContext=React.createContext();
-export const isVAContext=React.createContext();
+export const isVAContext=React.createContext();//表示VA界面状态；false：未显示，close：关闭，callend：通话结束或拒绝，call：发起通话，called：正在通话
 
 function App(props) {
   const userInfo=React.useContext(globalContext).userInfo;
@@ -27,7 +27,7 @@ function App(props) {
     <Button onClick={()=>{
       chatSocket.open();
       chatSocket.emit('newConnect',{userid:userInfo._id});
-       closeSnackbar(key)
+        closeSnackbar(key)
       }}>重新连接</Button>
   );
 
@@ -85,7 +85,7 @@ function App(props) {
   const [selectFriend,setSelectFriend]=React.useState(-1);
   const [friends,setFriends] =React.useState([]);
   const [isVA,setIsVA]=React.useState({
-    'value':false,
+    'value':'false',
     'updateIsVA':(flag)=>{setIsVA({...isVA,['value']:flag})}
   });
 
@@ -120,45 +120,45 @@ function App(props) {
   }
   return (
     <friendsContext.Provider value={friends}>
-      <friendContext.Provider value={{'updateSelect':updateSelect,'selectFriend':selectFriend}}>
-        <chatListContext.Provider value={{'listData':chatList,'selectChat':selectChat}}>
-        <isVAContext.Provider value={isVA}>
-        <Grid container  style={{position:'fixed'}}>   
-            <Grid item xs={12} sm={5} md={4} lg={3}  className={'sideNav'}>
-              <div className="userInfo">
-                  <Avatar src={imgHost+userInfo.avatar} className="avatar"></Avatar>
-                  <span className="name">{userInfo.name}</span>
-              </div>
-              <Paper className={'tab'} elevation={0}>
-                <Tabs indicatorColor="primary" textColor="primary"  variant="fullWidth" value={value} onChange={tabChange} className="tabs">
-                  <Tab label='消息' icon={<ChatBubble />}/>
-                  <Tab label='联系人' icon={<ContactPhone />}/>
-                  {/* <Tab label='3'/> */}
-                </Tabs>
-              </Paper>
-              <SwipeableViews index={value} onChangeIndex={swiperChange} style={{height:'100%'}}>
-                <ChatList></ChatList>
-                <Friends onFriendChange={updateSelect} getFriends={getFriends}/>
-                {/* <div>3</div> */}
-              </SwipeableViews>
-            </Grid>
-            <Hidden xsDown>   
-                  <Grid item xs={12} sm={7} md={8} lg={9}  className={'content'}>
+    <friendContext.Provider value={{'updateSelect':updateSelect,'selectFriend':selectFriend}}>
+    <chatListContext.Provider value={{'listData':chatList,'selectChat':selectChat}}>
+    <isVAContext.Provider value={isVA}>
+      <Grid container  style={{position:'fixed'}}>   
+          <Grid item xs={12} sm={5} md={4} lg={3}  className={'sideNav'}>
+            <div className="userInfo">
+                <Avatar src={imgHost+userInfo.avatar} className="avatar"></Avatar>
+                <span className="name">{userInfo.name}</span>
+            </div>
+            <Paper className={'tab'} elevation={0}>
+              <Tabs indicatorColor="primary" textColor="primary"  variant="fullWidth" value={value} onChange={tabChange} className="tabs">
+                <Tab label='消息' icon={<ChatBubble />}/>
+                <Tab label='联系人' icon={<ContactPhone />}/>
+                {/* <Tab label='3'/> */}
+              </Tabs>
+            </Paper>
+            <SwipeableViews index={value} onChangeIndex={swiperChange} style={{height:'100%'}}>
+              <ChatList></ChatList>
+              <Friends onFriendChange={updateSelect} getFriends={getFriends}/>
+              {/* <div>3</div> */}
+            </SwipeableViews>
+          </Grid>
+          <Hidden xsDown>   
+                <Grid item xs={12} sm={7} md={8} lg={9}  className={'content'}>
+                    {selectFriend===-1?<Chat />:<PersonHome />}
+                </Grid>
+          </Hidden>
+          <Hidden mdUp>   
+                <Slide in={selectChat.value!==-1||selectFriend!==-1} direction="right">
+                  <Grid item xs={12} className={'content'} style={{position:"absolute"}}>
                       {selectFriend===-1?<Chat />:<PersonHome />}
                   </Grid>
-            </Hidden>
-            <Hidden mdUp>   
-                  <Slide in={selectChat.value!==-1||selectFriend!==-1} direction="right">
-                    <Grid item xs={12} className={'content'} style={{position:"absolute"}}>
-                        {selectFriend===-1?<Chat />:<PersonHome />}
-                    </Grid>
-                  </Slide>
-            </Hidden>
-            <VAChat />
-        </Grid>
-        </isVAContext.Provider>
-        </chatListContext.Provider>
-      </friendContext.Provider>
+                </Slide>
+          </Hidden>
+          <VAChat />
+      </Grid>
+    </isVAContext.Provider>
+    </chatListContext.Provider>
+    </friendContext.Provider>
     </friendsContext.Provider>
   );
 }

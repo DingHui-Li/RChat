@@ -12,6 +12,10 @@ var chatListSchema=mongoose.Schema({
     }],
     time:Date,
     latelyChat:String,
+    type:{
+        type:String,
+        default:'text'
+    },
     newMsgNum:{
         type:Number,
         default:0
