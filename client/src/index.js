@@ -17,7 +17,7 @@ axiosInstance.interceptors.request.use(function(req){
 })
 axiosInstance.interceptors.response.use(function(res){
         if(res.data.code===400){
-            alert(res.data.msg);
+            console.log(res.data.msg);
         }
         return res;
 },function(err){

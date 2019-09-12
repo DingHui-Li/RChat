@@ -8,7 +8,6 @@ import {globalContext,RTCPeerConnectionContext} from '../index'
 import {friendContext,chatListContext,isVAContext} from '../views/App'
 import {useSnackbar} from 'notistack'
 import {updateChatList} from '../util/arrayUtil'
-import {hasRtcPeerConnection} from '../util/rtcPeerConnection'
 
 export default function SendChat(props){
     const [msgText,setMsgText]=React.useState('');
@@ -62,29 +61,21 @@ export default function SendChat(props){
     const VA=React.useContext(isVAContext);  
     async function call(){
         VA.updateIsVA('call');
-        if(hasRtcPeerConnection()){
-            window.rpc=new RTCPeerConnection(null);
-            await window.rpc.createOffer().then(function(offer){//发起端offer
+            window.rpc=new RTCPeerConnection(iceServers);
+            await window.rpc.createOffer({offerToReceiveAudio: 0,offerToReceiveVideo: 1}).then(function(offer){//发起端offer
                 window.rpc.setLocalDescription(offer);
-                console.log(offer.sdp)
                 chatSocket.emit('to',{'userid':userInfo._id,'friendid':chatList.selectChat.value._id,'msg':'','type':'video','offer':offer},toCallFunction);
             }).catch(function(err){
                 console.log(err);
             });
-            window.rpc.oniceconnectionstatechange = (evt) => {
-                console.log('ICE connection state change: ' + evt.target.iceConnectionState);
-            };
-            window.rpc.addEventListener('icecandidate', e =>{
-                console.log(e)
-            });
-            // window.rpc.onicecandidate=function(event){
-            //     console.log(event);
-            //     if(event.candidate){
-            //         console.log(event.candidate)
-            //     }
-            // }
-            console.log(window.rpc);
-        }
+            window.rpc.onTrack=function(event){
+                console.log(event);
+            }
+            window.rpc.onicecandidate=function(event){
+                if(event.candidate){
+                    chatSocket.emit('iceCandidate',{'userid':userInfo._id,'friendid':chatList.selectChat.value._id,'iceCandidate':event.candidate});
+                }
+            }
     }
     const [anchorEl,setAnchorEl]=React.useState(null);  
     const open=Boolean(anchorEl);

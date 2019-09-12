@@ -52,11 +52,11 @@ export default function VAChat(props){
     },[isVA.value]);
     useEffect(()=>{
         if(window.rpc){
-            window.rpc.ontrack=function(event){
-                console.log(event);
-            }
+            // window.rpc.ontrack=function(event){
+            //     console.log(event)
+            // }
         }
-    },[window.rpc])
+    })
     function narrow(){
         let ele=document.getElementById('VAChat');
         if(isnarrow){
@@ -106,7 +106,7 @@ export default function VAChat(props){
             }
         }
     return navigator.mediaDevices.getDisplayMedia(getDisplayMediaOpt).then(function(stream){
-                document.getElementById('videoChat').srcObject=stream;
+                document.getElementById('selfVideo').srcObject=stream;
                 if(window.rpc){
                     for(const track of stream.getTracks())
                     window.rpc.addTrack(track,stream);
@@ -128,10 +128,15 @@ export default function VAChat(props){
             }
         }
         return  navigator.mediaDevices.getUserMedia(opt).then(function(stream){
-                document.getElementById('videoChat').srcObject=stream;
+                document.getElementById('selfVideo').srcObject=stream;
                 if(window.rpc){
-                    for(const track of stream.getTracks())
-                    window.rpc.addTrack(track,stream);
+                    window.rpc.ontrack=function(e){
+                        console.log("get stream")
+                        console.log(e)
+                    }
+                    for(const track of stream.getTracks()){
+                        window.rpc.addTrack(track);
+                    }            
                 }
                 return true;
             }).catch(function(err){

@@ -8,7 +8,7 @@ import Message from './message'
 import {globalContext} from '../index'
 import {chatListContext,isVAContext} from '../views/App'
 import {axiosInstance as Axios} from '../index'
-import {useSnackbar} from 'notistack'
+import {useSnackbar, withSnackbar} from 'notistack'
 import {timeParse} from '../util/timeUtil'
 import {updateChatList,findIndex} from '../util/arrayUtil'
 
@@ -81,7 +81,12 @@ export default function Chat(props){
                                 window.rpc.createAnswer().then(function(answer){
                                     window.rpc.setLocalDescription(answer);//接收端 answer（snackbar）
                                     chatSocket.emit('call',{'action':'called','userid':userInfo._id,'friendid':data.data.userid,'answer':answer});
-                                })
+                                });
+                                window.rpc.onicecandidate=function(event){
+                                    if(event.candidate){
+                                        chatSocket.emit('iceCandidate',{'userid':userInfo._id,'friendid':data.data.userid,'iceCandidate':event.candidate});
+                                    }
+                                }
                             }
                             isVA.updateIsVA('called')
                         }}>
@@ -103,36 +108,42 @@ export default function Chat(props){
                 chatSocket.on('from',function(data){//chat组件->message组件->oneMsg组件 
                     setNewMsgData(data);
                     isVA.updateIsVA('false');
-                    if(data.data.userid!==chatList.selectChat.value._id){//
+                    //
                         if(data.data.type==='video'){
                             window.rpc=new RTCPeerConnection(iceServers);
                             window.rpc.setRemoteDescription(data.offer);//接收端offer
-                            const key=enqueueSnackbar('',{
-                                persist:true,
-                                variant:'info',
-                                anchorOrigin:{
-                                    horizontal:'right',
-                                    vertical:'top'
-                                },
-                                children:(key)=>(
-                                    snackBar2VA(data,key)
-                                )
-                            });
-                            setSnackBarKey(key);
+                            window.rpc.ontrack=function(event){
+                                console.log(event);
+                            }
+                            if(data.data.userid!==chatList.selectChat.value._id){
+                                const key=enqueueSnackbar('',{
+                                    persist:true,
+                                    variant:'info',
+                                    anchorOrigin:{
+                                        horizontal:'right',
+                                        vertical:'top'
+                                    },
+                                    children:(key)=>(
+                                        snackBar2VA(data,key)
+                                    )
+                                });
+                                setSnackBarKey(key);
+                            }
                         }else{
-                            enqueueSnackbar('',{
-                                autoHideDuration:8000,
-                                variant:'info',
-                                anchorOrigin:{
-                                    horizontal:'right',
-                                    vertical:'top'
-                                },
-                                children:(key)=>(
-                                    snackBar(data,key)
-                                )
-                            })
+                            if(data.data.userid!==chatList.selectChat.value._id){
+                                enqueueSnackbar('',{
+                                    autoHideDuration:8000,
+                                    variant:'info',
+                                    anchorOrigin:{
+                                        horizontal:'right',
+                                        vertical:'top'
+                                    },
+                                    children:(key)=>(
+                                        snackBar(data,key)
+                                    )
+                                })
+                            }
                         }
-                    }
                     if( chatList.selectChat.value._id===data.data.userid){
                         data.listData.newMsgNum=0;
                         newMsg(data.data);
@@ -154,6 +165,17 @@ export default function Chat(props){
                 closeSnackbar(snackBarKey);
             }
             isVA.updateIsVA(data.action)
+        });
+        chatSocket.on('iceCandidate',function(data){
+            if(window.rpc){
+                    window.rpc.addIceCandidate(new RTCIceCandidate(data.iceCandidate))
+                    .then(function(){
+                        console.log('addIceCandidate success');
+                    })
+                    .catch(function(err){
+                        console.log(err);
+                    });
+            }
         })
     },[])
     function newMsg(msg){
@@ -190,16 +212,15 @@ export default function Chat(props){
     function called(){
         if(snackBarKey) closeSnackbar(snackBarKey);
         if(window.rpc){
-            window.rpc.createAnswer().then(function(answer){
+            window.rpc.createAnswer({offerToReceiveAudio: 0,offerToReceiveVideo: 1}).then(function(answer){
                 window.rpc.setLocalDescription(answer);//接收端answer（chat界面）
-                window.rpc.onicecandidate=function(event){
-                    console.log(event);
-                    if(event.candidate){
-                        console.log(event.candidate)
-                    }
-                }
                 chatSocket.emit('call',{'action':'called','userid':userInfo._id,'friendid':newMsgData.data.userid,'answer':answer});
-            })
+            });
+            window.rpc.onicecandidate=function(event){
+                if(event.candidate){
+                    chatSocket.emit('iceCandidate',{'userid':userInfo._id,'friendid':newMsgData.data.userid,'iceCandidate':event.candidate});
+                }
+            }
         }
         isVA.updateIsVA('called')
     }
