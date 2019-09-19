@@ -2,8 +2,11 @@ var express = require('express');
 var router = express.Router();
 import userDao from '../Dao/userDao';
 import sessionDao from '../Dao/sessionDao';
+import socketDao from '../Dao/socketDao'
 let userSchema=require('../schema/userSchema');
 var ud=new userDao();
+var sd=new sessionDao();
+var skd=new socketDao();
 var mongoose= require('../Dao/connectDB');
 
 router.post('/register', function(req:any, res:any, next:any) {
@@ -26,7 +29,6 @@ router.post('/login',function(req:any,res:any){
   let pw=req.body.pw;
   ud.login(new userSchema({'name':name,'pw':pw})).then(async re=>{
       if(re.code==200){//密码验证通过
-        let sd=new sessionDao();
         let isexist=await sd.exist(re.data._id);
         if(isexist!=null){//若查询到session记录
           let result=await sd.remove(re.data._id);//则删除session
@@ -54,6 +56,18 @@ router.get('/exist',function(req:any,res:any){
       res.json({'code':500,'msg':'该账号不存在'});
     }
   })
+})
+router.get('/logout',function(req:any,res:any){
+    req.session.name=undefined;
+    if(req.session.userid){
+        sd.remove(req.session.userid).then(result=>{
+            if(result.code===200) skd.remove(req.session.userid);
+            res.json(result);
+        });
+        
+    }else{
+      res.json({'code':500});
+    }
 })
 
 router.get('/checksession',function(req:any,res:any){

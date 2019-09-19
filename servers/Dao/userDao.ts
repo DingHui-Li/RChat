@@ -30,7 +30,9 @@ export default class userDao{
         return new Promise(async (resolve)=>{
             let result =await this.exist(user);
             if(result){
-                this.User.findOne({name:user.name,pw:user.pw}).then((result:any)=>{
+                this.User.findOne({name:user.name,pw:user.pw})
+                .select(['_id','avatar','name'])
+                .then((result:any)=>{
                     if(result==null){
                         return resolve({"code":500,'msg':'密码错误'});
                     }else{

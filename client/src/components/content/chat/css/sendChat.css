@@ -1,0 +1,59 @@
+.sendChat{
+    width:100% !important;
+    height:250px;
+    position: relative;
+}
+.sendChat .textArea{
+    height:60%;
+    margin:10px 20px;
+    overflow: auto;
+    position: relative;
+}
+.sendChat .text{
+    max-height:100%;
+    overflow: auto;
+    font-size:1.2rem;
+}
+.sendChat .MuiInput-underline:before{
+    border:none !important;
+}
+.sendChat .MuiInput-underline:after{
+    border:none !important;
+}
+.sendChat .sendButton{
+    height:10%;
+    float:right;
+    margin-right:20px;
+}
+.sendChat .toolbar{
+    height: 10%;
+    padding:5px 10px;
+    position: relative;
+}
+.sendChat .toolbar .icon{
+    position: relative;
+    margin:0 5px;
+}
+.sendChat .toolbar .icon:hover{
+    opacity:0.7;
+}
+#emojContainer{
+    padding:0px;
+    max-width: 400px;
+}
+#emojContainer span{
+    margin:5px;
+    cursor: pointer;
+}
+#emojContainer span:hover{
+    filter: opacity(60%);
+}
+#emojContainer .emojPanel{
+    padding:10px;
+    max-height: 250px;
+    overflow: auto;
+    -webkit-user-select: none;  
+    -moz-user-select:none;  
+    -o-user-select:none;  
+    -ms-user-select:none;
+}

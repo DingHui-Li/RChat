@@ -20,6 +20,18 @@ const user=mongoose.Schema({
     },
     time:{
         type:Date
+    },
+    descText:{
+        type:String,
+        default:''
+    },
+    sex:{
+        type:String,
+        default:'male'
+    },
+    location:{
+        type:String,
+        default:''
     }
 });
 module.exports=mongoose.model('user',user);

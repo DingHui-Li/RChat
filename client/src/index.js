@@ -40,7 +40,7 @@ function Index(){
     }
     return(
         <globalContext.Provider value={globalData}>
-            <SnackbarProvider autoHideDuration={2000}>
+            <SnackbarProvider autoHideDuration={2000}  anchorOrigin={{vertical:'top',horizontal:'center'}}>
                 <Router>
                     <Route exact path="/login" render={()=>(<Login onUserInfoChange={userInfoUpdate}></Login>)}/>
                     <Route exact path="/" component={App} />

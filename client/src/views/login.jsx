@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import {Grid,Button,Paper,Card,CardContent,TextField,Typography} from '@material-ui/core'
-import '../css/login.css'
+import './css/login.css'
 import SendIcon from '@material-ui/icons/Send'
 import ArrowBack from '@material-ui/icons/ArrowBackIos'
 import 'animate.css'
@@ -103,11 +103,21 @@ function Login(props){
                     variant:'error',
                     preventDuplicate: true,
                     anchorOrigin:{
-                        vertical:'top',
+                        vertical:'center',
                         horizontal:'right'
                     }
                 });
             }
+        }).catch(err=>{
+            console.log(err)
+            enqueueSnackbar('服务器错误',{
+                variant:'error',
+                preventDuplicate: true,
+                anchorOrigin:{
+                    vertical:'top',
+                    horizontal:'center'
+                }
+            });
         })
     }
     function registerClick(){//注册
@@ -127,6 +137,15 @@ function Login(props){
                 anchorOrigin:{
                     vertical:'top',
                     horizontal:'right'
+                }
+            });
+        }).catch(err=>{
+            enqueueSnackbar('服务器错误',{
+                variant:'error',
+                preventDuplicate: true,
+                anchorOrigin:{
+                    vertical:'top',
+                    horizontal:'center'
                 }
             });
         })

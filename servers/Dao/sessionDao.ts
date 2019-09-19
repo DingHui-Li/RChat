@@ -17,7 +17,9 @@ export default class sessionDao{
     remove(id:any):Promise<any>{
         return new Promise(resolve=>{
             this.Session.deleteMany({'userid':id}).then((result:any)=>{
-                resolve(result);
+                resolve({'code':200,'result':result});
+            }).catch((err:any)=>{
+                resolve({'code':500});
             })
         })
     }

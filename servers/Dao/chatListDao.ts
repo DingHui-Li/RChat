@@ -12,6 +12,11 @@ export default class chatListDao{
                                 console.log(err);
                                 return resolve({'code':500,'msg':'系统错误'});
                             }else{
+                                for(let i in chatList){
+                                    if(chatList[i].friendid.length===0){
+                                        chatList.splice(i,1);
+                                    }
+                                }
                                 return resolve({'code':200,'msg':'获取chatlist成功','data':chatList});
                             }
                         })
@@ -29,16 +34,18 @@ export default class chatListDao{
                 'userid':chatList.userid,
                 'friendid':chatList.friendid,
             };
-            this.ChatList.findOneAndUpdate(conditions,chatList,options)
-                        .populate({path:'friendid',select:['_id','avatar','name']})
-                        .exec(function(err:any,result:any){
-                            if(err){
-                                console.log(err);
-                                return resolve({'code':500,'msg':'系统错误'});
-                            }else{
-                                return resolve({'code':200,'msg':'更新列表成功','data':result});
-                            }
-                        })
+            if(chatList.friendid&&chatList.userid){
+                this.ChatList.findOneAndUpdate(conditions,chatList,options)
+                            .populate({path:'friendid',select:['_id','avatar','name']})
+                            .exec(function(err:any,result:any){
+                                if(err){
+                                    console.log(err);
+                                    return resolve({'code':500,'msg':'系统错误'});
+                                }else{
+                                    return resolve({'code':200,'msg':'更新列表成功','data':result});
+                                }
+                            })
+            }
         })
     }
 

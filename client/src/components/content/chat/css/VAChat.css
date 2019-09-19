@@ -1,0 +1,105 @@
+#VAChat{
+    height:100%;
+    width: 100%;
+    min-width:200px;
+    min-height: 200px;
+    max-width: 100%;
+    max-height: 100%;
+    z-index: 11;
+    position: absolute;
+    background-color:#fff;
+    transition: width 0.3s,height 0.3s;
+    animation-duration: 0.4s;
+}
+#VAChat .icon{
+    cursor: pointer;
+    position:relative;
+    float:right;
+    color:#fff;
+    margin: 10px 5px;
+    z-index: 10;
+}
+#VAChat video{
+    width:100%;
+    height:100%;
+}
+#VAChat .topbar{
+    border-radius: 0;
+    position: absolute;
+    z-index: 10;
+    top:0;
+    width: 100%;
+    background-color: #607D8B;
+    transition: visibility 0.5s,background-color 0.5s;
+}
+#VAChat .option{
+    position: absolute;
+    z-index: 10;
+    height: 40%;
+    bottom: 0;
+    width: 100%;
+    background-color: rgba(96,125,139,.1);
+    transition: opacity 0.5s;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+#VAChat .selectButton{
+    background-color:#536DFE;
+    border-radius:50%;
+    width:40px;
+    height:40px;
+}
+#VAChat .closeBtn{
+    background-color:red;
+    border-radius:50%;
+    width:50px;
+    height:50px;
+}
+#VAChat .muteBtn{
+    border-radius:50%;
+    width:40px;
+    height:40px;
+    background-color: #388E3C
+}
+#VAChat #selfView{
+    position: absolute;
+    background-color: #fff;
+    top:0;
+    left:0;
+    transition: width 0.5s,height 0.5s
+}
+#VAChat .call{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 12;
+    background-color: rgba(0,0,0,.7);
+}
+#VAChat .call .userInfo{
+    height:50%;
+    width:100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+#VAChat .call .hangup{
+    height:50%;
+    width:100%;
+    display: flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items: center;
+}
+#VAChat .call .avatar{
+    height:100px;
+    width:100px;
+    border-radius: 50%;
+}
+#VAChat .call .name{
+    font-size:20px;
+    margin-top:20px;
+    font-weight:bold;
+    color:#fff
+}

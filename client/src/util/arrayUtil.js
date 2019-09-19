@@ -26,6 +26,16 @@ export function updateChatList(arr,newData){
     return arr;
 }
 
+export function updateFriendLineState(arr,newLineState,id){
+    for(let i=0;i<arr.length;i++){
+        if(arr[i]._id===id){
+            arr[i].line=newLineState;
+            break;
+        }
+    }
+    return arr;
+}
+
 export function findIndex(arr,field,value){
     for(let i=0;i<arr.length;i++){
         if(arr[i][field]===value){//对象解构
