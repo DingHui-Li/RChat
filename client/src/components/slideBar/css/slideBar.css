@@ -7,21 +7,33 @@
 }
 .tab .tabs{
     background-color: #fff;
-    border-top:1px solid rgba(84, 110, 122, 0.1);
+    /* border-top:1px solid rgba(84, 110, 122, 0.1); */
     border-bottom:1px solid rgba(84,110,122,.1);
 }
 .userInfo{
-    margin:20px auto;
-    width:fit-content;
+    margin: 0 20px;
+    position: relative;
     overflow: hidden;
+    float:left;
+    line-height: 50px;
+    margin-bottom: 20px;
 }
 .userInfo .avatar{
-    width:35px;
-    height:35px;
+    width:43px;
+    height:43px;
     float:left;
+    margin-top: 10px;
 }
 .userInfo .name{
     margin-left:10px;
-    line-height: 35px;
-    display: inline;
+    /* line-height: 35px; */
+}
+.userInfo .lineState{
+    position: absolute;
+    bottom:0;
+    left:53px;
+    float: left;
+    width:13px;
+    height:13px;
+    border-radius: 50%;
 }

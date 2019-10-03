@@ -1,7 +1,7 @@
 
 var mongoose=require('../Dao/connectDB')
-
 var Chat=require('../schema/chatSchema')
+
 import chatDao from'../Dao/chatDao'
 var cd=new chatDao();
 
@@ -12,10 +12,20 @@ var cld=new chatListDao();
 import socketDao from '../Dao/socketDao'
 var skd=new socketDao();
 
-const socketData=new Array();
+import applyDao from '../Dao/applyDao'
+var ad=new applyDao();
+
+import userDao from '../Dao/userDao'
+var ud=new userDao();
+
+import friendDao from '../Dao/friendDao'
+var fd=new friendDao();
 
 export default async function chatSocket(socket:any){
     socket.on('to',async function(data:any,callback:any){//接受消息
+        let isFriend=await fd.isFriend(data.userid,data.friendid);
+
+        if(!isFriend.isFriend) return callback({'code':400,'msg':'你不是对方的好友'});
         let chat=new Chat({
             _id:mongoose.Types.ObjectId(),
             userid:data.userid,
@@ -52,21 +62,39 @@ export default async function chatSocket(socket:any){
             socket.to(socketid).emit('from',{'code':200,'data':saveResult.msgData,'listData':updateResult_from.data});//转发,data:chat数据，listData：chatlist数据
         }
     });
+
+    socket.on('apply',function(data:any,callback:Function){//好友申请
+        ad.add(data.user,data.friend).then(async result=>{
+                callback(result);
+                if(result.code===200){//若是新的请求
+                    let socketid=await skd.get(data.friend);
+                    if(socketid){//若对方在线
+                        let user=await ud.getInfo(result.result.user);
+                        socket.to(socketid).emit('newApply',{'user':user.data,'data':result.result});//发送请求者用户信息
+                    }
+                }
+            })
+    })
+
     socket.on('receive',function(data:any){
         cld.clearMsgNum(data.userid,data.friendid);
     })
-    socket.on('newConnect',function(data:any){//用户新连接
+
+    socket.on('newConnect',function(data:any,callback:Function){//用户新连接
         //addSocketId(data.userid,socket.id)//保存对应的userid和socketid
         skd.add(data.userid,socket.id).then(data=>{
             if(data.code===500){
                 socket.to(socket.id).emit('disconnect');
+            }else{
+                socket.to(socket.id).emit('connect');
             }
         })
     });
+
     socket.on('call',async function(data:any){
         let socketid=await skd.get(data.friendid);
         if(socketid){
-            socket.to(socketid).emit('call',{'action':data.action,'answer':data.answer})
+            socket.to(socketid).emit('call',{'action':data.action})
         }
     });
     socket.on('sendOffer',async function(data:any){

@@ -1,0 +1,179 @@
+#write{
+    background-color: #fff;
+    overflow: auto;
+    height:100%;
+}
+#write .fab{
+    background-color: #2196F3;
+    position: absolute;
+    z-index: 4;
+    bottom: 0;
+    right: 0%;
+    transform: translate(-50%,-250%) !important;
+}
+#write .fab .icon{
+    color:#fff;
+}
+#write .loading{
+    position: absolute;
+    z-index: 5;
+}
+
+#write .input .MuiOutlinedInput-notchedOutline{
+    border:none;
+}
+
+#write .item{
+    overflow: hidden;
+    position: relative;
+    border-top: 1px solid #e0e0e0;
+    padding: 10px 20px;
+    background-color: transparent;
+    transition: background-color .4s;
+}
+#write .item .icon{
+    position: relative;
+    vertical-align: middle;
+    margin-right: 5px;
+}
+#write .item .text{
+    line-height: 40px;
+}
+#write .item .opt{
+    float:right;
+}
+#write .item .expandIcon{
+    color:#757575;
+    position: absolute;
+    right: 35px;
+    top:50%;
+    transform: translateY(-50%)
+}
+#write .expand:hover{
+    background-color: rgba(0,0,0,.1)
+}
+#write .expand .selected{
+    float:right;
+    margin:0 40px;
+    line-height: 40px;
+}
+#write .expand .selected .chip{
+    margin-right:10px;
+}
+
+#write .picture{
+    margin-bottom: 20px
+}
+#write .picture .placeholder{
+    width: 150px;
+    height: 150px; 
+    overflow: hidden;
+    background-color:#eeeeee;
+    transition: background-color .3s;
+    position: relative;
+}
+
+#write .picture .placeholder .deleteBtn{
+    position: absolute;
+    top:0;
+    right:0;
+    width:40px;
+    height:40px;
+    background-color: rgba(0,0,0,.2);
+}
+#write .picture .placeholder .deleteBtn .icon{
+    color:#fff;
+}
+
+#write .picture #imgPlaceholder .icon{
+    position: relative;
+    margin-top:50%;
+    margin-left:50%;
+    color:#e0e0e0;
+    width:50px;
+    height:50px;
+    transform: translate(-50%,-50%)
+}
+#write .picture .placeholder:hover{
+    background-color: rgba(0,0,0,.1)
+}
+#write .picture .loadingImg{
+    width:100% ;
+    z-index: 9;
+}
+
+#write .selectFriend{
+    position: absolute;
+    width: 100%;
+    height:100%;
+    top:0;
+    background-color: #fff;
+    z-index: 5;
+}
+#write .selectFriend .topBar{
+    width: 100%; 
+}  
+#write .selectFriend .topBar .btn{
+    background-color: #2196F3;
+    color:#fff;
+    position: absolute;
+    right:0;
+    border: none;
+}
+
+#write .selectFriend .friend{
+    width:100%;
+    overflow: hidden;
+    padding:10px;
+    background-color: transparent;
+    transition: background-color .3s;
+    border-bottom: 1px solid #eeeeee;
+}
+#write .selectFriend .friend:hover{
+    background-color: rgba(0,0,0,.1)
+}
+#write .selectFriend .friend .checkbox{
+    float:right;
+    margin-right:20px;
+    margin-top:7px;
+}
+#write .selectFriend .friend .avatar{
+    margin-right: 10px;
+    float:left;
+}
+#write .selectFriend .friend .name{
+    line-height: 40px;
+}
+#write .selectFriend .filter{
+    width:100%;
+    margin: 20px 10px;
+}
+#write .selectFriend .selectedContainer{
+    margin:20px;
+    padding:10px;
+}
+#write .selectFriend .selectedContainer .chip{
+    margin-right:10px;
+    font-size: 1rem;
+    color:#757575;
+    font-weight: bold;
+}
+
+#write .deleteArea{
+    /* width:100%; */
+    height:100px;
+    width:100%;
+    background-color: #F44336;
+    position: absolute;
+    z-index: 6;
+    top:0;
+    left:50%;
+    transform: translateX(-50%) !important;
+    text-align: center;
+    transition: border-radius .4s,box-shadow .4s,width .4s,margin-top .4s;
+
+    line-height: 100px;
+    color:#fff;
+    font-weight: bold;
+    font-size: 1.4rem;
+}

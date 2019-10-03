@@ -16,9 +16,13 @@ var chatSchema=mongoose.Schema({
     time:{
         type:Date
     },
-    type:{
+    type:{//消息类型：text,video,voice,phone
         type:String,
         default:'text'
+    },
+    chatType:{//聊天类型：user,system,group
+        type:String,
+        default:'user'
     }
 })
 

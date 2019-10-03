@@ -36,6 +36,10 @@ export function updateFriendLineState(arr,newLineState,id){
     return arr;
 }
 
+//@params
+//数组，字段，值
+//@return
+//下标
 export function findIndex(arr,field,value){
     for(let i=0;i<arr.length;i++){
         if(arr[i][field]===value){//对象解构

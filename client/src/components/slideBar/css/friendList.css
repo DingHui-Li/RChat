@@ -1,3 +1,10 @@
+#friendList{
+    overflow: auto;
+}
+#friendList .rightItem .name{
+    font-weight: bold ;
+    float:left;
+}
 #friendList .descText{
     width:100%;
     float:right;
@@ -8,4 +15,30 @@
 #friendList .avatar{
     width:43px;
     height:43px;
+}
+
+#friendList .newFriendItem{
+    width:100%;
+    overflow: hidden;
+    height:40px;
+    padding:10px 20px;
+}
+#friendList .newFriendItem:hover{
+    background-color:rgba(33,150,243,.1);
+}
+#friendList .newFriendItem .iconBox{
+    width:45px;
+    height:45px;
+    float:left;
+    background-color: #F57C00;
+    margin-right: 5px;
+}
+#friendList .newFriendItem .iconBox .icon{
+    color:#fff
+}
+#friendList .newFriendItem .text{
+    line-height: 40px;
+    font-weight: bold;
+    color:#454545;
+    font-size: 0.9rem;
 }

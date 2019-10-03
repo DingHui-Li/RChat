@@ -8,17 +8,7 @@ export var server=require('http').Server(app)
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-// var Friend=require('./schema/friendSchema')
-// var f=new Friend({'user':'5d5cbb51b41ac75a2c56e04b','friend':'5d56a38598f03826fce85a20'});
-// f.save();
-// var f2=new Friend({'user':'5d5cbb51b41ac75a2c56e04b','friend':'5d56b6b3f292965ed01c6c03'});
-// f2.save();
-// var f3=new Friend({'friend':'5d5cbb51b41ac75a2c56e04b','user':'5d56a38598f03826fce85a20'});
-// f3.save();
-// var f4=new Friend({'friend':'5d5cbb51b41ac75a2c56e04b','user':'5d56b6b3f292965ed01c6c03'});
-// f4.save();
-
-app.use(session({
+app.use(session({//session
     secret:'dsfsdtsasf2345sd',
     resave:true,
     saveUninitialized:false,
@@ -28,13 +18,13 @@ app.use(session({
     })
 }))
 
-app.all('*', function (req:any, res:any, next:any) {
+app.all('*', function (req:any, res:any, next:any) {//过滤器
     res.header('Access-Control-Allow-Origin', req.headers.origin);
     res.header('Access-Control-Allow-Credentials','true');
     res.header('Access-Control-Allow-Headers', 'Content-Type');
     res.header('Access-Control-Allow-Methods', '*');
-    res.header('Content-Type', 'application/json;charset=utf-8');
-    var filter=require('./routes/filter')
+    //res.header('Content-Type', 'application/json;charset=utf-8');
+    var filter=require('./util/filter')
     if(filter(req.url,res)){
         if(req.session.name!=undefined){
             next();
@@ -45,28 +35,31 @@ app.all('*', function (req:any, res:any, next:any) {
         next();
     }
 
-    if(req.url.indexOf('/images')!=-1){
-        res.header("Content-Type","image/jpeg")
-    }
-  });
+    // if(req.url.indexOf('/images')!=-1){
+    //     res.header("Content-Type","image/jpeg")
+    // }
+});
 
-app.use(express.static('public')); 
+app.use(express.static('public')); //静态文件
 
-var usersRouter = require('./routes/users.ts');
+var usersRouter = require('./routes/users.ts');//路由
 var friendRouter=require('./routes/friend.ts')
 var chatRouter=require('./routes/chat.ts')
+var thinkRouter=require('./routes/think.ts');
+var uploadRouter=require('./routes/upload.ts')
 app.use('/user', usersRouter);
 app.use('/friend',friendRouter);
 app.use('/chat',chatRouter);
+app.use('/think',thinkRouter);
+app.use('/upload',uploadRouter);
 
 
 server.listen(4000,()=>{
     console.log('listening 4000!!!');
 })
 
-import chatSocket from './util/chatSocket'
+import chatSocket from './util/chatSocket'//socket
 const io=require('socket.io')(server);
-io.of('/chat')
-    .on('connection',chatSocket)
+io.of('/server/chat').on('connection',chatSocket)
 
 export default io; 

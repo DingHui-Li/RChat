@@ -10,13 +10,9 @@ mongoose.connection.on('connected',function(){
 })
 mongoose.connection.on('error',function(err:any){
     console.log('mongoDB连接错误：'+err);
-    console.log('重新连接')
-    mongoose.connect(connectUrl,options);
 })
 mongoose.connection.on('disconnected',function(){
     console.log('mongoDB断开连接');
-    console.log('重新连接')
-    mongoose.connect(connectUrl,options);
 })
 mongoose.set('useFindAndModify', false);
 module.exports=mongoose;

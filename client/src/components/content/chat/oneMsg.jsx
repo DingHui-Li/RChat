@@ -1,20 +1,20 @@
-import React, { useContext, useEffect } from 'react'
-import { globalContext } from '../../../index';
-import {Avatar,Zoom} from '@material-ui/core'
+import React  from 'react'
+import {Avatar,Fade} from '@material-ui/core'
 import {Error} from '@material-ui/icons'
 import "./css/oneMsg.css"
 import 'animate.css'
 import {imgHost} from '../../../config'
 import {timeParse} from '../../../util/timeUtil'
-// import {useChatList} from '../../../context/chatListContext'
+import {useGlobal} from '../../../context/globalContext'
 import {useApp} from '../../../context/appContext'
 
 export default function OneMsg(props){
-    const userInfo=React.useContext(globalContext).userInfo;
+    const {userInfo}=useGlobal();
     const {chatList_selected,update_chatListSelected,update_friendsListSelected}=useApp();
 
     return (
-            <div className={'oneMsg animated fadeIn'}>
+        <Fade in={true} timeout={700}>
+            <div className='oneMsg'>
                 <div className="time" >
                     <span className='timeTxt'>{timeParse(props.msgData.time,true)}</span> 
                 </div>
@@ -49,5 +49,6 @@ export default function OneMsg(props){
                     </div>
                 }
             </div>
+            </Fade>
     )
 }

@@ -1,13 +1,15 @@
 var express = require('express');
+var mongoose= require('../Dao/connectDB');
 var router = express.Router();
 import userDao from '../Dao/userDao';
 import sessionDao from '../Dao/sessionDao';
 import socketDao from '../Dao/socketDao'
+import friendDao from '../Dao/friendDao'
 let userSchema=require('../schema/userSchema');
 var ud=new userDao();
 var sd=new sessionDao();
 var skd=new socketDao();
-var mongoose= require('../Dao/connectDB');
+var fd=new friendDao();
 
 router.post('/register', function(req:any, res:any, next:any) {
   let name=req.body.name;
@@ -76,6 +78,19 @@ router.get('/checksession',function(req:any,res:any){
   }else{
     res.json({'code':400,'msg':'未登陆'})
   }
+})
+
+router.get('/getInfo',async function(req:any,res:any){
+  let info=await ud.getInfo(req.query.id);
+  let isFriend=await fd.isFriend(req.session.userid,req.query.id);
+  res.json({info,isFriend});
+})
+
+router.get('/search',function(req:any,res:any){
+  if(req.query.keyword.trim().length===0) return;
+  ud.search(req.query.keyword).then(result=>{
+    res.json(result);
+  })
 })
 
 module.exports = router;

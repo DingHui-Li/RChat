@@ -1,13 +1,16 @@
 .personHome{
-    height:100%;
-    padding:50px;
+    height:100vh;
+    width:100%;
+    padding: 10px;
+    overflow: auto;
     background-color: rgba(96,125,139,0.2);
 }
 .personHome .card{
     border-radius:10px;
-    /* height:100%; */
+    max-height:100%;
     margin:0 auto;
     margin-top:20px;
+    margin-bottom: 20px;
     padding: 0;
     position: relative;
     overflow: hidden;
@@ -22,13 +25,18 @@
     font-weight: bold;
     width:100%;
     text-align: center;
-    margin-top:10px
+    margin-top:10px;
+    margin-bottom:10px
 }
+.personHome .card .name .sexIcon{
+    width:15px;
+    height:15px;
+}
+
 .personHome .card .sign{
     text-align: center;
     font-size: 15px;
     color: #8b8b8b;
-    margin-bottom:20px;
 }
 .personHome .card .button{
     width:100%;
@@ -36,17 +44,83 @@
     font-size:15px;
     color:#757575;
 }
+.personHome .name img{
+    width:20px;
+    height: 20px;
+    margin-left: 5px;
+}
 .button .buttonIcon{
     margin-right:10px;
     width:20px;
     height:20px;
 }
 .personHome .closeBtn{
-    float:right;
+    position: absolute;
+    z-index: 5;
+    right:0;
+    top:0;
+    background-color: rgba(158,158,158,.2)
 }
+.personHome .avatar_cover{
+    height:auto;
+    width:100%;
+    max-height:300px;
+    position: relative;
+    overflow: hidden;
+}
+.personHome .avatar_cover .cover{
+    width:100%;
+    height:100%;
+}
+.personHome .avatar_cover .avatar{
+    position: absolute;
+    top:50%;
+    left:50%;
+    transform: translate(-50%,-50%);
+    z-index: 5;
+    width:80px;
+    height:80px;
+}
+
 .personHome .sendMsgBtn{
     position: absolute;
     background-color: #1976D2 !important;
-    top:-25px;
-    right:20px;
+    top:0;
+    right:0;
+    transform: translate(-50%,-70%)
+}
+.personHome .location{
+    text-align:center;
+    color:#757575;
+    margin-bottom: 20px;
+}
+.personHome .location .icon{
+    position: relative;
+    width:20px;
+    height:20px;
+    vertical-align:middle;
+}
+
+#delPopper{
+    padding:20px;
+    margin-bottom: 17px;
+}
+#delPopper .arrow{
+    position: absolute;
+    bottom:0;
+    left:50%;
+    transform: translateX(-50%);
+    display: block;
+    border-top: 10px solid #fff;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-left: 10px solid transparent;
+}
+#delPopper .action{
+    margin-top:10px;
+    overflow: hidden;
+    position: relative;
+}
+#delPopper .action .icon{
+    color:#fff
 }

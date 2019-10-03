@@ -1,19 +1,17 @@
 import React, { useEffect } from 'react'
+import {LinearProgress } from '@material-ui/core'
 import './css/message.css'
 import OneMsg from './oneMsg'
-import {globalContext} from '../../../index'
+import {useGlobal} from '../../../context/globalContext'
 import {scrollDown} from '../../../util/scrollRoll'
-import {isVAContext} from '../../../views/App'
 import {apiHost} from '../../../config'
 import {axiosInstance as Axios} from '../../../index'
 import {findIndex} from '../../../util/arrayUtil'
 import { VariableSizeList as List } from 'react-window';
-// import {useMsgData} from '../../../context/msgContext'
-// import {useChatList} from '../../../context/chatListContext'
 import {useApp} from '../../../context/appContext'
 
 export default function Message(props){
-    const userInfo=React.useContext(globalContext).userInfo;
+    const {userInfo}=useGlobal();
     const {chatList_data,update_chatListData,chatList_selected,update_chatListSelected}=useApp();
     const {msgData,setMsgData}=useApp();
     useEffect(()=>{
@@ -61,6 +59,11 @@ export default function Message(props){
     return(
         <div className="message" id="messageBox" style={{height:props.height}}>
             {
+                msgData.length===0&&
+                <LinearProgress  />
+            }
+            {
+                Array.isArray(msgData)&&
                 msgData.filter((item,index)=>index>=msgData.length-20).map((msg)=>{
                     if(msg!=[]){
                         return  <OneMsg isme={msg.userid===userInfo._id} msgData={msg} key={msg._id}></OneMsg>

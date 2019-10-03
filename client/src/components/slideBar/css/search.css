@@ -1,0 +1,56 @@
+#search{
+    padding:0 30px 5px 20px;
+    overflow:hidden;
+    clear:both
+}
+#search .searchBox{
+    background-color: #fff;
+    width:100%;
+    float: left;
+    padding: 0 5px;
+    display: flex;
+    align-items: center;
+}
+#search #search{
+    border-left:1px solid #e0e0e0;
+    padding-left:10px;
+}
+
+.searchResult{
+    padding:15px 15px 5px 15px;
+    margin-top:5px;
+}
+
+.searchResult .item{
+    min-width: 150px;
+    height:40px;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+.searchResult .item .avatar{
+    widows: 40px;
+    height: 40px;
+    float:left;
+    margin-right: 10px;
+}
+.searchResult .item .other{
+    vertical-align: middle;
+    float:left
+}
+.searchResult .item .other .name{
+    margin-right: 5px;
+}
+.searchResult .item .other .icon{
+    width:15px;
+    height:15px;
+    position: relative;
+}
+.searchResult .item .btn{
+    margin-left: 50px;
+    float: right;
+}
+.searchResult .item .tipText{
+    line-height: 45px;
+    color:#757575;
+    font-weight: bold;
+}

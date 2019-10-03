@@ -1,0 +1,29 @@
+#explore{
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+}
+#explore .social{
+    padding:10px 20px;
+    position: relative;
+    overflow: hidden;
+    background-color: transparent;
+    transition: background-color .4s;
+}
+#explore .social:hover{
+    background-color:rgba(33,150,243,.1);
+}
+#explore .social .iconBox{
+    width:40px;
+    height:40px;
+    background-color: #4CAF50;
+    margin-right: 5px;
+}
+#explore .social .iconBox .icon{
+    color:#fff;
+}
+#explore .social .text{
+    line-height: 40px;
+    font-weight: bold;
+    color:#757575;
+}

@@ -1,0 +1,57 @@
+#apply{
+    padding:15px 20px 5px 20px;
+    width:100%;
+}
+#apply .paper{
+    padding: 10px;
+    overflow: hidden;
+    position: relative;
+
+}
+#apply .paper .avatar{
+    width: 40px;
+    height:40px;
+    margin-right: 10px;
+    float:left
+}
+#apply .paper .info{
+    max-width: 40%; 
+    overflow: hidden;
+    white-space: nowrap;
+}
+#apply .paper .info .name{
+    font-weight: bold;
+    width:100%;
+    text-overflow:ellipsis;
+    overflow: hidden;
+}
+#apply .paper .info .applyText{
+    font-size: 0.8rem;
+    color:#757575;
+    width:100%;
+    text-overflow:ellipsis;
+    overflow: hidden;
+}
+#apply .paper .action{
+    position: absolute;
+    right: 30px;
+    top:50%;
+    transform: translateY(-50%)
+}
+#apply .paper .action .btn{
+    width:40px;
+    height:40px;
+
+}
+#apply .paper .clearBtn{
+    position: absolute;
+    top:0;
+    right:0;
+}
+#apply .paper .clearBtn .icon{
+    width: 15px;
+    height:15px;
+}
+#apply .paper .action .btn .icon{
+    color:#fff;
+}

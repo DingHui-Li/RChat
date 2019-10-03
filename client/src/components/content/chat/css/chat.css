@@ -6,22 +6,26 @@
 .topBar{
     padding:20px 5px;
     border-bottom:1px solid rgba(96,125,139,.1);
+    overflow: hidden;
+    display: flex;
+    justify-items: center;
 }
 .chat .userInfo{
     margin:0 auto;
-    width:fit-content;
     overflow: hidden;
     cursor: pointer;
+    display: flex;
+    justify-items: center;
+    align-items: center
 }
 .chat .userInfo .avatar{
-    width:35px;
-    height:35px;
+    width:40px;
+    height:40px;
+    margin: 0;
     float:left;
 }
 .chat .userInfo .name{
     margin-left:10px;
-    line-height: 35px;
-    display: inline;
 }
 .chat .userInfo .linetip{
     margin-left: 10px;

@@ -1,0 +1,59 @@
+#myHome{
+    width:100%;
+    height: 100vh;
+    overflow: auto;
+    background-color: #fff
+}
+#myHome .userInfo{
+    width:100%;
+    height:300px;
+    overflow: hidden;
+    position: absolute;
+    padding:0;
+    margin:0;
+    transition: height .4s ease-out;
+    display: flex;
+    justify-items: center;
+    justify-content: center;
+    align-items: center
+}
+#myHome .userInfo .setBtn{
+    position: absolute;
+    z-index: 5;
+    right: 0;
+    top:0;
+}
+#myHome  .userInfo .cover{
+    width: 100%;
+    height: auto;
+    height:auto;
+    position: absolute;
+    z-index: 1;
+}
+#myHome  .userInfo .avatar{
+    width:80px;
+    height:80px;
+    position: absolute;
+    z-index: 2;
+    margin:0;
+    transition: width .4s,height .4s;
+}
+#myHome  .userInfo .loadingAvatar{
+    position: relative;
+    z-index: 3;
+}
+#myHome  .userInfo .loadingCover{
+    position: absolute;
+    top:0;
+    z-index: 4;
+    width:100% !important;
+}
+
+#myHome .contentContainer{
+    width:100%;
+    height:auto;
+    margin-top:300px;
+    margin-bottom:50px;
+    overflow: hidden !important;
+    transition: margin .4s ease-out;
+}

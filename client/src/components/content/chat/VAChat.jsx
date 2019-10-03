@@ -4,7 +4,7 @@ import {Fullscreen,FullscreenExit,Lock,LockOpen,Close,Mic,MicOff,Airplay,CameraA
 import './css/VAChat.css'
 import elementMove from '../../../util/elementMove'
 import {chatSocket, imgHost,iceServers} from '../../../config'
-import {globalContext} from '../../../index'
+import {useGlobal} from '../../../context/globalContext'
 import {getDisplayMedia,getCameraMedia} from '../../../util/getMediaStream'
 import {useSnackbar} from 'notistack'
 import {useApp} from '../../../context/appContext'
@@ -17,7 +17,7 @@ export default function VAChat(props){
         y:0
     });
     const {enqueueSnackbar}=useSnackbar();
-    const userInfo=React.useContext(globalContext).userInfo;
+    const {userInfo}=useGlobal();
     const [isnarrow,setNarrow]=React.useState(true);//窗口缩放
     const [locked,setLock]=React.useState(true);//窗口是否可移动
     const [anchorEl,setAnchorEl]=React.useState(null);//选择菜单锚点
@@ -162,54 +162,55 @@ export default function VAChat(props){
         visibility:isnarrow&&VAState!=='false'&&VAState!=='close'&&VAState!=='callend'?'visible':'hidden'
     }
     return (
-        <React.Fragment>
             <Slide in={VAState!=='false'&&VAState!=='close'&&VAState!=='callend'} timeout={500}>
-            <Paper id="VAChat" onMouseMove={(e)=>{onMouseMove(e)}} className='animated fadeIn' onMouseEnter={mouseEnter} onMouseLeave={mouseLeave}
-                    style={{margin:0}}
-                    onMouseDown={(e)=>{
-                        setMouseCoord({['x']:e.clientX,['y']:e.clientY})
-                    }}>
-                {VAState==='call'&&call()}
-                <Fade in={isShow}>
-                    <div>
-                        <Paper className="topbar" >
-                            {
-                                isnarrow? 
-                                <FullscreenExit onClick={narrow} className='icon'/>
-                                :
-                                <Fullscreen onClick={narrow} className='icon'/>
-                            }
-                            {
-                                locked? 
-                                <Lock className='icon' onClick={()=>{setLock(false)}}/>
-                                :
-                                <LockOpen className='icon'  onClick={()=>{setLock(true)}} />
-                            }
-                        </Paper>
-                        <div className="option">
-                            {selectButton()}
-                            <ButtonBase className='closeBtn' onClick={close} elevation={7}>
-                                <CallEnd style={{color:'#fff',width:'30px',height:'30px'}}  />
-                            </ButtonBase>
-                            <ButtonBase className="muteBtn">
-                                <Mic style={{color:'#fff'}}/>
-                            </ButtonBase>
-                        </div> 
-                    </div>
-                </Fade>
-                <video id="videoChat" autoPlay></video>
-                <Paper id="selfView" style={selfVideoStyle} 
-                        onMouseMove={(e)=>{
-                            let coordinate=elementMove('#VAChat','#selfView',mouseCoord,e);
-                            if(coordinate) setMouseCoord(coordinate);}}
-                >
-                    <video id="selfVideo" autoPlay style={{transform:mediaType===0?' rotateY(180deg)':''}}></video>
-                    <IconButton style={{position:'absolute',bottom:0,right:0}} onClick={(e)=>{mediaChange()}}> 
-                        <SwapVert  />
-                    </IconButton>
+                <Paper id="VAChat" onMouseMove={(e)=>{onMouseMove(e)}} className='animated fadeIn' onMouseEnter={mouseEnter} onMouseLeave={mouseLeave}
+                        style={{margin:0}}
+                        onMouseDown={(e)=>{
+                            setMouseCoord({['x']:e.clientX,['y']:e.clientY})
+                        }}>
+                    {VAState==='call'&&call()}
+                    <Fade in={isShow}>
+                        <div>
+                            <Paper className="topbar" elevation={0}>
+                                {
+                                    isnarrow? 
+                                    <FullscreenExit onClick={narrow} className='icon'/>
+                                    :
+                                    <Fullscreen onClick={narrow} className='icon'/>
+                                }
+                                {
+                                    locked? 
+                                    <Lock className='icon' onClick={()=>{setLock(false)}}/>
+                                    :
+                                    <LockOpen className='icon'  onClick={()=>{setLock(true)}} />
+                                }
+                            </Paper>
+                            <div className="option">
+                                {selectButton()}
+                                <ButtonBase className='closeBtn' onClick={close} elevation={7}>
+                                    <CallEnd style={{color:'#fff',width:'30px',height:'30px'}}  />
+                                </ButtonBase>
+                                <ButtonBase className="muteBtn">
+                                    <Mic style={{color:'#fff'}}/>
+                                </ButtonBase>
+                            </div> 
+                        </div>
+                    </Fade>
+                    <video id="videoChat" autoPlay onClick={()=>{
+                            if(isShow) setIsShow(false);
+                            else setIsShow(true);
+                    }}></video>
+                    <Paper id="selfView" style={selfVideoStyle} 
+                            onMouseMove={(e)=>{
+                                let coordinate=elementMove('#VAChat','#selfView',mouseCoord,e);
+                                if(coordinate) setMouseCoord(coordinate);}}
+                    >
+                        <video id="selfVideo" autoPlay style={{transform:mediaType===0?' rotateY(180deg)':''}}></video>
+                        <IconButton style={{position:'absolute',bottom:0,right:0}} onClick={(e)=>{mediaChange()}}> 
+                            <SwapVert  />
+                        </IconButton>
+                    </Paper>
                 </Paper>
-            </Paper>
             </Slide>
-        </React.Fragment>
     )
 }

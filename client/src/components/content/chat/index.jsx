@@ -37,41 +37,32 @@ export default function Chat(props){
     },[chatList_selected])
     
     return (
-        // <Slide in={msgData.length>0} direction="left" timeout={500}>
-            <Grid item xs={12} className='chat'>
-                {
-                    chatList_selected!==-1&&
-                    <div>
-                        <Grid item xs={12} className="topBar">
-                            <Hidden mdUp>
-                                <Button style={{float:'left'}} onClick={()=>{setMsgData([]);update_chatListSelected(-1)}}>
-                                    <ArrowBack></ArrowBack>
-                                </Button>
-                            </Hidden>
-                            <div>
-                                <div className="userInfo" onClick={()=>{
-                                    update_friendsListSelected(chatList_selected);
-                                    update_chatListSelected(-1);
-                                }}>
-                                    <Avatar src={imgHost+chatList_selected.avatar} className="avatar"></Avatar>
-                                    <div className="name">
-                                        {chatList_selected.name}
-                                        <span className="linetip" style={{color:isLine?'#4CAF50':'#FF5252'}}>
-                                            {
-                                                isLine?'[在线]':'[离线]'
-                                            }
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </Grid>
-                        {
-                            messageArea()
-                        }
-                        <SendChat/>
+            <div className='chat'>
+                <Grid item xs={12} className="topBar">
+                    <Hidden mdUp>
+                        <Button style={{float:'left'}} onClick={()=>{setMsgData([]);update_chatListSelected(-1)}}>
+                            <ArrowBack></ArrowBack>
+                        </Button>
+                    </Hidden>
+                    <div className="userInfo" onClick={()=>{
+                        update_friendsListSelected(chatList_selected);
+                        update_chatListSelected(-1);
+                    }}>
+                        <Avatar src={imgHost+chatList_selected.avatar} className="avatar"></Avatar>
+                        <div className="name">
+                            {chatList_selected.name}
+                            <span className="linetip" style={{color:isLine?'#4CAF50':'#FF5252'}}>
+                                {
+                                    isLine?'[在线]':'[离线]'
+                                }
+                            </span>
+                        </div>
                     </div>
+                </Grid>
+                {
+                    messageArea()
                 }
-            </Grid>
-        // </Slide>
+                <SendChat/>
+            </div>
     )
 }

@@ -18,6 +18,10 @@ const user=mongoose.Schema({
         type:String,
         default:'/avatar.png'
     },
+    cover:{
+        type:String,
+        default:'/avatar.png'
+    },
     time:{
         type:Date
     },

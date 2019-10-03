@@ -9,8 +9,10 @@ import {apiHost} from '../config'
 import {withRouter } from 'react-router-dom'
 import {useSnackbar} from 'notistack'
 import md5 from 'md5'
+import {useGlobal} from '../context/globalContext'
 
 function Login(props){
+    const {updateUserInfo}=useGlobal();
     let welcomeRef=React.createRef();
     let loginRef=React.createRef(0);
     let icon=React.createRef();
@@ -96,27 +98,17 @@ function Login(props){
             if(res.data.code===200){
                 localStorage['userInfo']=JSON.stringify(res.data.data);
                 console.log(res.data.data);
-                props.onUserInfoChange(res.data.data);
+                updateUserInfo(res.data.data);
                 props.history.push('/');
             }else{
                 enqueueSnackbar(res.data.msg,{
                     variant:'error',
-                    preventDuplicate: true,
-                    anchorOrigin:{
-                        vertical:'center',
-                        horizontal:'right'
-                    }
                 });
             }
         }).catch(err=>{
             console.log(err)
-            enqueueSnackbar('服务器错误',{
+            enqueueSnackbar('发生错误:'+err,{
                 variant:'error',
-                preventDuplicate: true,
-                anchorOrigin:{
-                    vertical:'top',
-                    horizontal:'center'
-                }
             });
         })
     }
@@ -242,7 +234,7 @@ function Login(props){
                                     <TextField fullWidth placeholder="密码" type="password" value={user.pw} onChange={inputChange('pw')} 
                                         style={{marginBottom:'20px'}} helperText={user.pwHelperText} error={user.pw.trim().length<=0}/>  
                                     <TextField fullWidth placeholder="确认密码" type="password" value={user.confirmPw} error={!user.isConfirm}
-                                         onChange={inputChange('confirmPw')} style={{marginBottom:'20px'}} helperText={user.confirmPwHelperText}/>  
+                                        onChange={inputChange('confirmPw')} style={{marginBottom:'20px'}} helperText={user.confirmPwHelperText}/>  
                                     <Button style={{float:'right',backgroundColor:'#2196F3' ,color:'#fff'}} onClick={registerClick}>
                                         创建
                                     </Button> 

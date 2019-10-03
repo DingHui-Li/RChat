@@ -35,7 +35,7 @@
     padding-bottom: 10px;
 }
 
-.name{
+#chatList .name{
     font-weight: bold !important;
     float:left;
 }

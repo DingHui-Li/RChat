@@ -2,7 +2,7 @@
     padding:0;
     overflow: hidden;
     width:100%;
-    animation-duration: 0.8s;
+    position: relative;
 }
 .oneMsg .avatar{
     width:30px;

@@ -6,7 +6,7 @@ import SwipeableViews from 'react-swipeable-views';
 import './css/sendChat.css'
 import SendIcon from '@material-ui/icons/Send'
 import {chatSocket} from '../../../config'
-import {globalContext} from '../../../index'
+import {useGlobal} from '../../../context/globalContext'
 import {useSnackbar} from 'notistack'
 import {updateChatList} from '../../../util/arrayUtil'
 import {initMediaStream} from '../../../util/getMediaStream'
@@ -15,8 +15,7 @@ import {axiosInstance as Axios} from '../../../index'
 
 export default function SendChat(props){
     const [msgText,setMsgText]=React.useState('');
-    let globalData=React.useContext(globalContext);
-    const userInfo=globalData.userInfo;
+    const {userInfo}=useGlobal();
     const {enqueueSnackbar}=useSnackbar();
     const {chatList_data,update_chatListData,chatList_selected}=useApp();
     const {setNewMsgData}=useApp();
@@ -65,7 +64,6 @@ export default function SendChat(props){
                             {'userid':userInfo._id,'friendid':chatList_selected._id,'msg':msgText,'type':'text'},
                             function(data){
                                 setSendBtnDisabled(false);
-                                console.log('send call');
                                 if(data.code===200){
                                     setMsgText('');
                                     data.msgData.code=data.code;
@@ -103,8 +101,7 @@ export default function SendChat(props){
             if(!window.rpc.remoteDescription){
                 window.rpc.setRemoteDescription(new RTCSessionDescription(data.sdp));
             }
-            if(data.candidate)  window.rpc.addIceCandidate(data.candidate);    
-                
+            if(data.candidate)  window.rpc.addIceCandidate(data.candidate);
         })
     },[])
 
@@ -118,7 +115,7 @@ export default function SendChat(props){
             document.getElementById('selfVideo').srcObject=stream;
             window.rpc.addTrack(stream.getVideoTracks()[0],stream);
             window.rpc.createOffer({OfferToReceiveAudio: true, OfferToReceiveVideo: true}).then(function(offer){//发起端offer
-                chatSocket.emit('to',{'userid':userInfo._id,'friendid':chatList_selected._id,'msg':'','type':'video','offer':offer},toCallFunction);
+                chatSocket.emit('to',{'userid':userInfo._id,'friendid':chatList_selected._id,'msg':'','type':'video'},toCallFunction);
                 window.rpc.setLocalDescription(new RTCSessionDescription(offer));
             }).catch(function(err){
                 console.log(err);
@@ -128,7 +125,6 @@ export default function SendChat(props){
                     chatSocket.emit('sendOffer',{'friendid':chatList_selected._id,'candidate':event.candidate,'sdp':window.rpc.localDescription});
                 }
             }
-    
             window.rpc.ontrack=function(event){
                 document.getElementById('videoChat').srcObject=event.streams[0];
             };
@@ -171,11 +167,6 @@ export default function SendChat(props){
                                                         {emojPanel}
                                                     </div>
                                                 )
-                                                emojis['活动'].map((emoj,index)=>{
-                                                    return (
-                                                        <span key={index}>{emoj.emoji}</span>
-                                                    )
-                                                })
                                             })
                                         }
                                     </SwipeableViews>

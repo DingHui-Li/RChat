@@ -1,3 +1,5 @@
+// import 'babel-polyfill/node_modules/core-js'
+// import 'babel-polyfill/node_modules/regenerator-runtime/runtime'
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import Login from './views/login.jsx'
@@ -7,6 +9,7 @@ import { BrowserRouter as Router, Route} from "react-router-dom";
 import axios from 'axios'
 import {SnackbarProvider} from 'notistack'
 import {apiHost,chatSocket} from './config'
+import GlobalContext from './context/globalContext'
 
 export const axiosInstance=axios.create();
 axiosInstance.interceptors.request.use(function(req){
@@ -25,28 +28,16 @@ axiosInstance.interceptors.response.use(function(res){
     return Promise.reject(err);
 })
 
-export const globalContext=React.createContext();
-
 function Index(){
-    let info=""; 
-    if(localStorage['userInfo']!=undefined){
-        info=JSON.parse(localStorage['userInfo']); 
-    } 
-    const [globalData,setGlobalData]=useState({'userInfo':info});
-
-    function userInfoUpdate(info){
-        console.log(info)
-        setGlobalData({...globalData,['userInfo']:info});
-    }
     return(
-        <globalContext.Provider value={globalData}>
-            <SnackbarProvider autoHideDuration={2000}  anchorOrigin={{vertical:'top',horizontal:'center'}}>
+        <GlobalContext>
+            <SnackbarProvider autoHideDuration={3000}  anchorOrigin={{vertical:'top',horizontal:'center'}}  preventDuplicate={true}>
                 <Router>
-                    <Route exact path="/login" render={()=>(<Login onUserInfoChange={userInfoUpdate}></Login>)}/>
+                    <Route exact path="/login" render={()=>(<Login></Login>)}/>
                     <Route exact path="/" component={App} />
                 </Router>
             </SnackbarProvider>
-        </globalContext.Provider>
+        </GlobalContext>
     )
 }
 
